@@ -1,4 +1,3 @@
-
 # 🕰️ Doomsday Clock Now
 
 Simulação diária do **Relógio do Juízo Final**, atualizada com base em **notícias reais** e interpretada por **inteligência artificial (IA)** via [Groq API](https://groq.com/).
@@ -32,15 +31,15 @@ cd doomsday-clock-now
 pip install -r requirements.txt
 ```
 
-3. Crie um arquivo `.env` com sua chave da Groq API:
-```
+3. Crie um arquivo `.env` com suas chaves da API:
+```env
 GROQ_API_KEY=gsk_sua_chave_aqui
 GNEWS_API_KEY=sua_chave_gnews_aqui
 ```
 
-4. Execute o app:
+4. Execute o app (se `main.py` estiver em `app/`):
 ```bash
-streamlit run app_streamlit.py
+streamlit run app/main.py
 ```
 
 ---
@@ -62,10 +61,10 @@ streamlit run app_streamlit.py
 
 - Python 3.11+
 - Streamlit
-- Groq (LLama 3 - 70B)
+- Groq (LLaMA 3 - 70B)
 - GNews API
-- dotenv
-- requests
+- `dotenv`
+- `requests`
 
 ---
 
@@ -75,4 +74,4 @@ streamlit run app_streamlit.py
 
 ---
 
-Feito com ☕ e ⚠️ por Lucas Castro
+Feito com ☕ e ⚠️ por **Lucas Castro**
