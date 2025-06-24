@@ -40,34 +40,39 @@ st.markdown("### 📰 Notícias atuais analisadas")
 st.code(noticias, language="text")
 
 # Botão de análise
+# Botão de análise
 if st.button("🔄 Atualizar relógio com base nas notícias"):
     try:
-        resposta = analisar_noticias(noticias)
-        linhas = [linha.strip() for linha in resposta.split("\n") if linha.strip()]
+        resposta = analisar_noticias(noticias)  # Agora retorna uma lista de dicionários
 
-        if len(linhas) < 2 or ":" not in linhas[0] or ":" not in linhas[1]:
+        if not isinstance(resposta, list) or not resposta or "tempo_para_meianoite" not in resposta[0]:
             st.error("❌ A IA não respondeu no formato esperado. Tente novamente.")
             st.code(resposta)
         else:
-            tempo_raw = linhas[0].split(":")[1].strip().lower()
+            # Pegamos a análise mais crítica (menor tempo para meia-noite)
+            analise_critica = min(resposta, key=lambda x: x["tempo_para_meianoite"])
 
-            if "minuto" in tempo_raw:
-                tempo_em_segundos = int("".join(filter(str.isdigit, tempo_raw))) * 60
-            elif "segundo" in tempo_raw:
-                tempo_em_segundos = int("".join(filter(str.isdigit, tempo_raw)))
-            else:
-                tempo_em_segundos = None
-
-            risco = linhas[1].split(":")[1].strip()
-            analise = "\n".join(linhas[2:]).replace("Análise: ", "").strip()
+            tempo_em_segundos = analise_critica["tempo_para_meianoite"]
+            risco = analise_critica["nivel_de_risco"]
+            analise_texto = analise_critica["analise"]
 
             atualizado_em = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
             st.success(f"⏳ Tempo para a meia-noite: {tempo_em_segundos} segundos")
             st.info(f"🔴 Nível de risco: {risco}")
             st.markdown("### 🧠 Análise da IA")
-            st.write(analise)
+            st.write(analise_texto)
             st.caption(f"Atualizado em {atualizado_em}")
+
+            # Exibir todas as análises
+            with st.expander("🔍 Ver todas as análises"):
+                for item in resposta:
+                    st.markdown(f"**📰 {item['manchete']}**")
+                    st.markdown(f"- ⏱️ Tempo: **{item['tempo_para_meianoite']}s**")
+                    st.markdown(f"- ⚠️ Risco: **{item['nivel_de_risco']}**")
+                    st.markdown(f"- 🧠 Análise: {item['analise']}")
+                    st.markdown("---")
 
     except Exception as e:
         st.error(f"Erro ao atualizar: {e}")
+
